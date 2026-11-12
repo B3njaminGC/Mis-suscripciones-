@@ -1,0 +1,38 @@
+name: Build APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: subosity/flutter-action@v2
+        with:
+          channel: stable
+
+      # Genera las carpetas de Android sin tocar lib/ ni test/
+      - name: Crear proyecto Android
+        run: flutter create --platforms=android --project-name mis_suscripciones .
+
+      - run: flutter pub get
+
+      - name: Tests
+        run: flutter test
+
+      - name: Compilar APK
+        run: flutter build apk --release
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mis-suscripciones-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
