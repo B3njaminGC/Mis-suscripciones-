@@ -16,9 +16,14 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - uses: subosity/flutter-action@v2
-        with:
-          channel: stable
+      # Flutter directo desde su repo oficial, sin depender de una action de terceros
+      - name: Instalar Flutter
+        run: |
+          git clone --depth 1 -b stable https://github.com/flutter/flutter.git "$HOME/flutter"
+          echo "$HOME/flutter/bin" >> "$GITHUB_PATH"
+
+      - name: Verificar Flutter
+        run: flutter --version
 
       # Genera las carpetas de Android sin tocar lib/ ni test/
       - name: Crear proyecto Android
