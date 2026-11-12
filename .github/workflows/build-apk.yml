@@ -27,7 +27,10 @@ jobs:
 
       # Genera las carpetas de Android sin tocar lib/ ni test/
       - name: Crear proyecto Android
-        run: flutter create --platforms=android --project-name mis_suscripciones .
+        run: |
+          flutter create --platforms=android --project-name mis_suscripciones .
+          # flutter create agrega un test de ejemplo que no corresponde a esta app
+          rm -f test/widget_test.dart
 
       - run: flutter pub get
 
